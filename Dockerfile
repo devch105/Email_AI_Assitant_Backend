@@ -14,7 +14,7 @@ RUN mvn clean package -DskipTests
 # =========================
 # Stage 2: Run the JAR
 # =========================
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
 # Copy the JAR built in stage 1
