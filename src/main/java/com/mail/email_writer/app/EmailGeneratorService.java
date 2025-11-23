@@ -13,10 +13,7 @@ public class EmailGeneratorService {
 
     private final WebClient webClient;
 
-    @Value("${gemini.api.url}")
-    private String geminiApiUrl;
-
-    @Value("${gemini.api.key}")
+    @Value("${GEMINI_KEY}")  // ✅ Direct environment variable
     private String geminiApiKey;
 
     public EmailGeneratorService(WebClient.Builder webClientBuilder) {
@@ -24,12 +21,10 @@ public class EmailGeneratorService {
     }
 
     public String generateEmailReply(EmailRequest emailRequest) {
-        // Build the prompt
         String prompt = buildPrompt(emailRequest);
 
-        // Craft a request including model specification
+        // ✅ NO "model" field - only contents
         Map<String, Object> requestBody = Map.of(
-                "model", "gemini-2.5-flash",   // specify the model here
                 "contents", new Object[] {
                         Map.of("parts", new Object[]{
                                 Map.of("text", prompt)
@@ -37,19 +32,19 @@ public class EmailGeneratorService {
                 }
         );
 
-        // Do request and get response
+        // ✅ Hardcoded URL with CORRECT model name
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=" + geminiApiKey;
+
         String response = webClient.post()
-                .uri(geminiApiUrl + geminiApiKey)
-                .header("Content-Type","application/json")
+                .uri(url)
+                .header("Content-Type", "application/json")
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
-        // Extract Response and Return
         return extractResponseContent(response);
     }
-
 
     private String extractResponseContent(String response) {
         try {
@@ -69,9 +64,9 @@ public class EmailGeneratorService {
 
     private String buildPrompt(EmailRequest emailRequest) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Generate a professional email reply for hte following email content. Please don't generate a subject line ");
+        prompt.append("Generate a professional email reply for the following email content. Please don't generate a subject line. ");  // ✅ Fixed typo "hte" → "the"
         if (emailRequest.getTone() != null && !emailRequest.getTone().isEmpty()) {
-            prompt.append("Use a ").append(emailRequest.getTone()).append(" tone.");
+            prompt.append("Use a ").append(emailRequest.getTone()).append(" tone. ");
         }
         prompt.append("\nOriginal email: \n").append(emailRequest.getEmailContent());
         return prompt.toString();
