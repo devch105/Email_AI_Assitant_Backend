@@ -58,7 +58,8 @@ public class EmailGeneratorService {
                     .bodyToMono(String.class)
                     .block();
 
-            System.out.println("=== Gemini raw response : " + resp);
+
+            System.out.println(" Gemini raw response : " + resp);
             return extractResponseContent(resp);
         } catch (WebClientResponseException e) {
             // Print the server response body - this is critical to debug 400s
