@@ -17,7 +17,7 @@ public class EmailGeneratorService {
     private final ObjectMapper mapper = new ObjectMapper();
 
     // Read env var / property. Provide empty default to avoid startup failure if missing.
-    @Value("${GEMINI_KEY:}")
+    @Value("${GEMINI_KEY}")
     private String geminiApiKey;
 
     // prefer builder so you can set base url if desired
