@@ -33,7 +33,7 @@ public class EmailGeneratorService {
         );
 
         // ✅ Hardcoded URL with CORRECT model name
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=" + geminiApiKey;
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + geminiApiKey;
 
         String response = webClient.post()
                 .uri(url)
