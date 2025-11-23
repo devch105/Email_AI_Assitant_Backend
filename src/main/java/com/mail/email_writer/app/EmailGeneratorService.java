@@ -27,8 +27,9 @@ public class EmailGeneratorService {
         // Build the prompt
         String prompt = buildPrompt(emailRequest);
 
-        // Craft a request
+        // Craft a request including model specification
         Map<String, Object> requestBody = Map.of(
+                "model", "gemini-2.5-flash",   // specify the model here
                 "contents", new Object[] {
                         Map.of("parts", new Object[]{
                                 Map.of("text", prompt)
@@ -48,6 +49,7 @@ public class EmailGeneratorService {
         // Extract Response and Return
         return extractResponseContent(response);
     }
+
 
     private String extractResponseContent(String response) {
         try {
