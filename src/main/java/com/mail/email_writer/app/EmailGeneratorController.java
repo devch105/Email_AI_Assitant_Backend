@@ -44,6 +44,12 @@ public class EmailGeneratorController {
      * It will build the minimal request with whatever you send and call Gemini,
      * printing both outgoing JSON and any error body.
      */
+
+      @GetMapping("/health")
+    public Map<String, String> health() {
+        return Map.of("status", "ok", "app", "email-backend");
+    }
+    
     @PostMapping("/debug/generateFromServer")
     public ResponseEntity<String> debugGenerateFromServer(@RequestBody Map<String, Object> payload) {
         try {
